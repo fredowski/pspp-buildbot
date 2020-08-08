@@ -1,0 +1,19 @@
+# Configuration file to create lxc containers
+
+# network
+lxc.net.0.type = veth
+lxc.net.0.flags = up
+lxc.net.0.link = virbr0
+
+# idmap - compare with /etc/subuid and /etc/subgid
+lxc.idmap = u 0 165536 65536
+lxc.idmap = g 0 165536 65536
+
+# We must turn off the CGroup V1 device controls so that LXC can start
+lxc.cgroup.devices.deny =
+lxc.cgroup.devices.allow =
+
+# If /sbin/init in guest is systemd, it requires LXC to prepare /sys/fs/cgroup
+lxc.mount.auto = cgroup:rw:force
+
+
