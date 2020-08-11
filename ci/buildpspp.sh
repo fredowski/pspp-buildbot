@@ -15,5 +15,3 @@ mkdir build
 cd build
 ../pspp/configure --prefix=/usr --libdir=/usr/lib64
 make -j8
-make check
-
