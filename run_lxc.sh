@@ -2,6 +2,7 @@
 
 name="debian-buster"
 
+lxc-info -n $name
 lxc-copy --name $name --newname vm1
 lxc-start vm1 --logfile=/tmp/lxc.log --logpriority=INFO
 sleep 15
