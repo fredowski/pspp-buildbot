@@ -4,6 +4,8 @@
 lxc.net.0.type = veth
 lxc.net.0.flags = up
 lxc.net.0.link = virbr0
+lxc.net.0.name = eth0
+lxc.net.0.ipv4.address = 0.0.0.0/24
 
 # idmap - compare with /etc/subuid and /etc/subgid
 lxc.idmap = u 0 165536 65536
@@ -15,5 +17,9 @@ lxc.cgroup.devices.allow =
 
 # If /sbin/init in guest is systemd, it requires LXC to prepare /sys/fs/cgroup
 lxc.mount.auto = cgroup:rw:force
+
+lxc.apparmor.profile = unconfined
+
+lxc.init.cmd = /sbin/init systemd.unified_cgroup_hierarchy=1
 
 
