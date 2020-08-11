@@ -13,6 +13,7 @@ lxc-attach -n $name -- sh -c "echo 'pspp ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 lxc-attach -n $name -- zypper install -y gcc python3 perl texinfo texlive \
         gsl-devel gtk3-devel gtksourceview-devel \
         pkg-config gperf git unzip curl autoconf libtool \
-        gettext readline-devel libxml2-devel automake make
+        gettext readline-devel libxml2-devel automake make \
+        glibc-locale
 lxc-stop $name
 
