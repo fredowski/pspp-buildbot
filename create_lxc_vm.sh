@@ -3,7 +3,7 @@
 name="debian-buster"
 
 lxc-create -n $name -t download -f lxc-config -- -d debian -r buster -a amd64
-systemd-run --user -r -p "Delegate=yes" lxc-start -F $name
+systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
 lxc-attach -n $name -- apt install -y openssl openssh-server sudo

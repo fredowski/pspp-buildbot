@@ -5,7 +5,7 @@ newname="vm2"
 
 lxc-info $name
 lxc-copy --name $name --newname vm2
-systemd-run --user -r -p "Delegate=yes" lxc-start -F vm2
+systemd-run --user -p "Delegate=yes" lxc-start -F vm2
 # Wait for network to be ready
 sleep 15
 # Copy the files in directory ./ci into the container

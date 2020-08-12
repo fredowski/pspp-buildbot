@@ -3,7 +3,7 @@
 name="opensuse"
 
 lxc-create -n $name -t download -f lxc-suse-config -- -d opensuse -r 15.2 -a amd64
-systemd-run --user --scope -p "Delegate=yes" lxc-start $name
+systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
 lxc-attach -n $name -- zypper install -y openssl openssh sudo
