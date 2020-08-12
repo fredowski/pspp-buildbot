@@ -161,3 +161,99 @@ Enable the autostart of the bridge at boot
 virsh --connect=qemu:///system net-autostart default
 ```
 
+### UID and GID
+
+When the container is run as user, then the user id (uid) and the group id (gid) must be
+mapped. The buildbot user has sub user and group ids that can be used. They are defined
+in 
+
+```
+(sandbox) buildbot@caeis:~$ cat /etc/subuid
+buildbot:165536:65536
+(sandbox) buildbot@caeis:~$ cat /etc/subgid
+buildbot:165536:65536
+(sandbox) buildbot@caeis:~$ 
+```
+These settings must match the setting in the lxc configuration file.
+
+#### Example lxc-config file
+
+```
+# Configuration file to create lxc containers
+
+# network
+lxc.net.0.type = veth
+lxc.net.0.flags = up
+lxc.net.0.link = virbr0
+lxc.net.0.name = eth0
+lxc.net.0.ipv4.address = 0.0.0.0/24
+
+# idmap - compare with /etc/subuid and /etc/subgid
+lxc.idmap = u 0 165536 65536
+lxc.idmap = g 0 165536 65536
+
+# We must turn off the CGroup V1 device controls so that LXC can start
+lxc.cgroup.devices.deny =
+lxc.cgroup.devices.allow =
+
+# If /sbin/init in guest is systemd, it requires LXC to prepare /sys/fs/cgroup
+lxc.mount.auto = cgroup:rw:force
+
+lxc.apparmor.profile = unconfined
+
+lxc.init.cmd = /sbin/init systemd.unified_cgroup_hierarchy=1
+```
+
+#### Example session
+
+If everything is setup, then 
+
+```
+(sandbox) buildbot@caeis:~/pspp-buildbot$ lxc-create -n debian-container  -t download -f lxc-config -- -d debian -r stretch -a amd64
+Setting up the GPG keyring
+Downloading the image index
+Downloading the rootfs
+Downloading the metadata
+The image cache is now ready
+Unpacking the rootfs
+
+---
+You just created a Debian stretch amd64 (20200812_05:24) container.
+
+To enable SSH, run: apt install openssh-server
+No default root or user password are set by LXC.
+(sandbox) buildbot@caeis:~/pspp-buildbot$ lxc-ls
+debian-buster    debian-container opensuse         
+(sandbox) buildbot@caeis:~/pspp-buildbot$ lxc-info debian-container
+Name:           debian-container
+State:          STOPPED
+(sandbox) buildbot@caeis:~/pspp-buildbot$ systemd-run --user -p "Delegate=yes" lxc-start -F debian-container
+Running as unit: run-r36f4233c31a042deaaec3fa7af01124a.service
+(sandbox) buildbot@caeis:~/pspp-buildbot$ lxc-info debian-container
+Name:           debian-container
+State:          RUNNING
+PID:            11657
+IP:             192.168.122.217
+Memory use:     15.44 MiB
+KMem use:       3.06 MiB
+Link:           vethMOG2Y9
+ TX bytes:      2.02 KiB
+ RX bytes:      2.15 KiB
+ Total bytes:   4.17 KiB
+(sandbox) buildbot@caeis:~/pspp-buildbot$ lxc-attach -n debian-container
+root@debian-container:/# ping -c 3 www.debian.org
+PING www.debian.org (130.89.148.77) 56(84) bytes of data.
+64 bytes from klecker-misc.debian.org (130.89.148.77): icmp_seq=1 ttl=52 time=19.0 ms
+64 bytes from klecker-misc.debian.org (130.89.148.77): icmp_seq=2 ttl=52 time=19.2 ms
+64 bytes from klecker-misc.debian.org (130.89.148.77): icmp_seq=3 ttl=52 time=19.1 ms
+
+--- www.debian.org ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 19.083/19.158/19.231/0.060 ms
+root@debian-container:/# exit
+exit
+(sandbox) buildbot@caeis:~/pspp-buildbot$
+```
+
+You created a debian stretch container, started the container, logged in and you
+run ping as root.
