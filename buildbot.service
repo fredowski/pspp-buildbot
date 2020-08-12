@@ -1,0 +1,13 @@
+[Unit]
+Type=Exec
+Description=BuildBot master service
+
+[Service]
+#WorkingDirectory=/home/buildbot/pspp-buildbot/master
+#Environment="VIRTUAL_ENV=/home/buildbot/sandbox"
+#Environment="PATH=/home/buildbot/sandbox/bin:/usr/local/bin:/usr/bin:/bin"
+ExecStart=%h/pspp-buildbot/start_buildbot.sh
+#ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=default.target
