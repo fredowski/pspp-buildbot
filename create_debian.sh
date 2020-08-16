@@ -1,11 +1,31 @@
 #!/bin/bash -xve
 
 distribution=debian
-release=sid
+release=$1
+architecture=$2
 
-name="$distribution-$release"
+function usage {
+  echo "usage: $0 release architecture"
+  echo "release = buster or sid"
+  echo "architecture = amd64 or i386"
+  exit 1
+}
 
-lxc-create -n $name -t download -f lxc-config -- -d $distribution -r $release -a amd64
+# Check input parameters
+case $release in
+  buster|sid) ;;
+  *) usage ;;
+esac
+
+case $architecture in
+  amd64|i386) ;;
+  *) usage ;;
+esac
+
+name="$distribution-$release-$architecture"
+echo "Creating: $name"
+
+lxc-create -n $name -t download -f lxc-config -- -d $distribution -r $release -a $architecture
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
