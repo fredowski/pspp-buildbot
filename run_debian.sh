@@ -33,9 +33,12 @@ lxc-info -n $name
 lxc-copy --name $name --newname $buildvm
 systemd-run --user -p "Delegate=yes" lxc-start -F $buildvm
 sleep 15
-lxc-attach -n $buildvm -- su pspp -c "cd; git clone https://github.com/fredowski/pspp.git"
-lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; git checkout travis"
-lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; ./ci/prepare.sh"
-lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; ./ci/buildssw.sh"
+# Copy the files in directory ./ci into the container
+pushd ~/pspp-buildbot
+tar -c ./ci | lxc-attach -n $buildvm -- tar -C /home/pspp -vx
+popd
+lxc-attach -n $buildvm -- su pspp -c "cd; git clone --depth=2 git://git.savannah.gnu.org/pspp.git"
+lxc-attach -n $buildvm -- su pspp -c "cd; ./ci/prepare.sh"
+lxc-attach -n $buildvm -- su pspp -c "cd; ./ci/buildssw.sh"
 lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; make -f Smake"
-lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; ./ci/buildpspp-linux.sh"
+lxc-attach -n $buildvm -- su pspp -c "cd; ./ci/buildpspp-git.sh"
