@@ -37,7 +37,18 @@ sleep 15
 pushd ~/pspp-buildbot
 tar -c ./ci | lxc-attach -n $buildvm -- tar -C /home/pspp -vx
 popd
-lxc-attach -n $buildvm -- su pspp -c "cd; git clone --depth=2 git://git.savannah.gnu.org/pspp.git"
+
+pushd ~/pspp-buildbot
+tar -cf /tmp/$name-gitrepo.tar --directory=worker/$name build
+scp -o StrictHostKeyChecking=no \
+    -i ./buildbot_rsa \
+    /tmp/$name-gitrepo.tar \
+    pspp@`lxc-info -n $buildvm -i -H`:~
+popd
+lxc-attach -n $buildvm -- su pspp -c "cd; tar -xf $name-gitrepo.tar"
+lxc-attach -n $buildvm -- su pspp -c "cd; mv build pspp"
+
+#lxc-attach -n $buildvm -- su pspp -c "cd; git clone --depth=2 git://git.savannah.gnu.org/pspp.git"
 lxc-attach -n $buildvm -- su pspp -c "cd; ./ci/prepare.sh"
 lxc-attach -n $buildvm -- su pspp -c "cd; ./ci/buildssw.sh"
 lxc-attach -n $buildvm -- su pspp -c "cd ~/pspp; make -f Smake"
