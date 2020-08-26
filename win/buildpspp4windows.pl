@@ -84,7 +84,7 @@ my $NumDateVersion = sprintf "20.%02d.%02d.%02d", $year-100,$mon+1,$mday;
 my $DisplDateVersion = sprintf "%4d-%02d-%02d", $year+1900,$mon+1,$mday;
 
 my $BaseDir = "$ENV{HOME}";
-my $WebDir   = "$BaseDir/webdisk/pspp";
+my $WebDir   = "$BaseDir/win";
 my $BaseWorkDir = "$BaseDir/$psppGenericName-$StrDateVersion";
 my $BaseUploadDir = "$BaseWorkDir/Upload";
 my $FinalDir = "$BaseWorkDir/pspp";
@@ -120,8 +120,10 @@ print "repo_version:    $repo_version\n";
 sleep(10.01);
 
 ProcCollectFiles();
-ProcGeneratePSPP("w32","Debug");
-ProcGeneratePSPP("w32","Normal");
+if (-d "/usr/i686-w64-mingw32/sys-root/mingw") {
+  ProcGeneratePSPP("w32","Debug");
+  ProcGeneratePSPP("w32","Normal");
+}
 $MingwDir = "/usr/x86_64-w64-mingw32/sys-root/mingw";
 if (-d $MingwDir){
   ProcGeneratePSPP("w64","Debug");
@@ -228,7 +230,7 @@ sub ProcCollectFiles
   copy ("$WebDir/used-in-build/inc/DebugPSPP.bat", "$UploadDir/used-in-build/inc") or die "copy DebugPSPP.bat to finaldir failed: $!";
 #  copy ("$WebDir/used-in-build/inc/settings.ini", "$UploadDir/used-in-build/inc") or die "copy settings.ini to uploaddir failed: $!";
   # collect missing files not provided by mingw pacakages
-  copy ("/usr/share/icons/hicolor/index.theme", "$UploadDir/used-in-build/index.theme") or die "copy index.theme to uploaddir failed: $!";
+ # copy ("/usr/share/icons/hicolor/index.theme", "$UploadDir/used-in-build/index.theme") or die "copy index.theme to uploaddir failed: $!";
 }
 
 
@@ -247,7 +249,7 @@ sub ProcGeneratePSPP
     $WindowsPlatform = "64bits";
     $KindIndicator = "4"; 
   }                                           
-  system("echo ProcGeneratePSPP: WindowsPlatform: $WindowsPlatform Debug: $Debug | mutt -s 'Start ProcGeneratePSPP' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
+ # system("echo ProcGeneratePSPP: WindowsPlatform: $WindowsPlatform Debug: $Debug | mutt -s 'Start ProcGeneratePSPP' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
      
   $MingwDir = "/usr/$MingwPrefix-w64-mingw32/sys-root/mingw";
   unless(-d $MingwDir){die "$MingwDir not found. Install the required Mingw toolchain using, for example with 'Cross-compiling-PSPP.ymp', first";}
@@ -256,9 +258,9 @@ sub ProcGeneratePSPP
         $permissions = sprintf "%04o", S_IMODE($mode);
         print "File permissions of $MingwDir/bin: $permissions\n";
      if ($permissions != 777) {
-       print "Press any key to continue";
+       #print "Press any key to continue";
        #The <STDIN> is the way to read keyboard input
-       $answer = <STDIN>;
+       #$answer = <STDIN>;
        system("sudo chmod -R 777 $MingwDir") ==0 or die "chmod $MingwDir failed";
      } else {
        print "$MingwDir/bin is already writable!\n"
@@ -617,7 +619,7 @@ sub ProcGeneratePSPP
       open(FH, ">$WebDir/PSPPGenWin/Previous.txt") or die "Couldn't open: $!";
       print FH "SuccessFul tests:$SuccessfulTests\n";
       close FH; 
-      system("echo Check is ready: SuccessFul tests:$SuccessfulTests  Previous SuccessfulTests: $PreviousSuccessfulTests | mutt -s 'Check is ready' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
+ #  system("echo Check is ready: SuccessFul tests:$SuccessfulTests  Previous SuccessfulTests: $PreviousSuccessfulTests | mutt -s 'Check is ready' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
       if ($SuccessfulTests > $SuccessfulTests) {
         printf "SuccessFul tests:$SuccessfulTests,  Previous SuccessfulTests: $PreviousSuccessfulTests \n";
         print "Please type any key: ";
@@ -656,8 +658,7 @@ sub ProcGeneratePSPP
     system("tar -rf $BaseWorkDir/pspp.tar share/gtksourceview-3.0/language-specs/*.dtd") == 0 or die "Tar failed: $!"; 
     system("tar -rf $BaseWorkDir/pspp.tar share/gtksourceview-3.0/language-specs/def.lang") == 0 or die "Tar failed: $!"; 
     system("tar -rf $BaseWorkDir/pspp.tar share/icons/hicolor/*") == 0 or die "Tar failed: $!";
-    system("tar -rf $BaseWorkDir/pspp.tar share/icons/Adwaita/16x16/* share/icons/Adwaita/2?x2?/*") == 0 or die "Tar failed: $!";
-    system("tar -rf $BaseWorkDir/pspp.tar share/icons/Adwaita/index.theme") == 0 or die "Tar failed: $!";
+    system("tar -rf $BaseWorkDir/pspp.tar share/icons/Adwaita/*") == 0 or die "Tar failed: $!";
     system("tar -rf $BaseWorkDir/pspp.tar share/doc/pspp/pspp.html/*") == 0 or die "Tar failed: $!";    
     system("tar -rf $BaseWorkDir/pspp.tar share/glib-2.0/schemas/*") == 0 or die "Tar failed: $!";   
     system("tar -rf $BaseWorkDir/pspp.tar share/locale/ca/*    share/locale/cs/*    share/locale/de/*    share/locale/el/*    share/locale/es/*") == 0 or die "Tar failed: $!";  
@@ -677,7 +678,7 @@ sub ProcGeneratePSPP
       copy ("$UploadDir/used-in-build/inc/DebugPSPP.bat", "$FinalDir/bin") or die "copy DebugPSPP.bat to finaldir failed: $!";
     }     
      # copy files not provided by mingw packages on the right place    
-    copy ("$UploadDir/used-in-build/index.theme", "/$FinalDir/share/icons/hicolor") or die "copy index.theme to finaldir failed: $!";
+#    copy ("$UploadDir/used-in-build/index.theme", "/$FinalDir/share/icons/hicolor") or die "copy index.theme to finaldir failed: $!";
     copy ("/$FinalDir/share/icons/Adwaita/22x22/status/image-missing.png", "/$FinalDir/share/icons/image-missing.png") or die "copy image-missing.png to finaldir failed: $!";
    
     # copying/converting all the required files to a temporary directory 
@@ -739,32 +740,32 @@ sub ProcUploading
   system("cat /tmp/read.me3   >> $UploadDir/DebugVersion/readme.txt") == 0 or die "debug/readme.txt failed: $!";
 #  copy ("$MyScript", "$UploadDir/used-in-build/".basename($MyScript)) or die "copy to basedir failed: $!"; 
   print "Gebruikte routine $MyScript controleeer waarom dity niet goed werkt";  
-  copy ("/home/harry/webdisk/pspp/buildpspp4windows.pl", "$UploadDir/used-in-build/buildpspp4windows.pl") or die "copy to basedir failed: $!";
+#  copy ("/home/harry/webdisk/pspp/buildpspp4windows.pl", "$UploadDir/used-in-build/buildpspp4windows.pl") or die "copy to basedir failed: $!";
   print "******************************************\n";
   print "* Rsync to sourceforge ".localtime()."    \n";
   print "******************************************\n";
-  system("echo PSPP4Windows is ready to upload.| mutt -s 'PSPP4Windows is generated' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
-  print "Press any key to continue";
-  #The <STDIN> is the way to read keyboard input
-  $answer = <STDIN>;
-  print "* Rsync to sourceforge start ".localtime()."    \n";
-  my $MySourceforge = 'pspp4windows,pspp4windows@frs.sourceforge.net:/home/frs/project/pspp4windows';
-  system("rsync -avP -e ssh * $MySourceforge") == 0 or
-        system("rsync -avP -e ssh * $MySourceforge") == 0 or
-              system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                    system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                          system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                                system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                                      system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                                            system("rsync -avP -e ssh * $MySourceforge") == 0 or
-                                                  system("rsync -avP -e ssh * $MySourceforge") == 0 or die "rsync failed: $!";
+#  system("echo PSPP4Windows is ready to upload.| mutt -s 'PSPP4Windows is generated' 'pspp4windows\@gmail.com'") == 0 or die "ready mail not send!";  
+#  print "Press any key to continue";
+#  #The <STDIN> is the way to read keyboard input
+#  $answer = <STDIN>;
+#  print "* Rsync to sourceforge start ".localtime()."    \n";
+#  my $MySourceforge = 'pspp4windows,pspp4windows@frs.sourceforge.net:/home/frs/project/pspp4windows';
+#  system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#        system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#              system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                    system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                          system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                                system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                                      system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                                            system("rsync -avP -e ssh * $MySourceforge") == 0 or
+#                                                  system("rsync -avP -e ssh * $MySourceforge") == 0 or die "rsync failed: $!";
   chdir "$BaseDir";
-  unless ($keep) {
-    print "******************************************\n";
-    print "* remove working directory ".localtime()."\n";
-    print "******************************************\n";
-    system("rm -r  $BaseWorkDir") == 0 or die "rm -r failed: $!";
-  }
+#  unless ($keep) {
+#    print "******************************************\n";
+#    print "* remove working directory ".localtime()."\n";
+#    print "******************************************\n";
+#    system("rm -r  $BaseWorkDir") == 0 or die "rm -r failed: $!";
+#  }
   print "******************************************\n";
   print "* finished ".localtime()."\n";
   print "******************************************\n";
