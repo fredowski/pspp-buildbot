@@ -34,6 +34,13 @@ sudo zypper install -y mingw64-cross-gcc makeinfo wget wine glib2-devel \
      mingw64-readline-devel \
      mingw64-libxml2-devel
 
+sudo zypper -n addrepo -G https://download.opensuse.org/repositories/windows:mingw:win32/\
+openSUSE_Leap_15.2/windows:mingw:win32.repo
+
+sudo zypper -n refresh
+
+sudo zypper install -y mingw32-cross-nsis
+
 sudo chown -R pspp:users /usr/x86_64-w64-mingw32
 
 #Adwaita icon theme
