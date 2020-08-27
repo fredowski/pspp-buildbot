@@ -16,4 +16,4 @@ lxc-attach -n $newname -- su pspp -c "cd; sudo chown -R pspp:users ./win"
 lxc-attach -n $newname -- su pspp -c "cd ~/win; ./buildssw-win.sh"
 
 lxc-attach -n $newname -- su pspp -c "cd ~/win; ./buildpspp4windows.pl"
-lxc-attach -n $newname -- su pspp -c "cd; ./ci/buildpspp.sh"
+
