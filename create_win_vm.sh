@@ -19,6 +19,5 @@ lxc-attach -n $name -- chown pspp:users /home/pspp/prepare_win.sh
 lxc-attach -n $name -- chmod a+x /home/pspp/prepare_win.sh
 lxc-attach -n $name -- su pspp -c 'cd; ./prepare_win.sh'
 
-exit
 lxc-stop $name
 

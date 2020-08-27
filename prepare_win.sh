@@ -4,6 +4,8 @@
 
 cd
 
+# gtk3-devel is only required for gtk-encode-symbolic-svg which
+# is required for the adwaita icon theme to create png icon files
 sudo zypper install -y gcc perl \
         pkg-config git unzip curl libtool \
         make gtk3-devel dos2unix makeinfo wget wine glib2-devel \
@@ -13,11 +15,14 @@ sudo zypper install -y gcc perl \
 gettext=gettext-0.21
 curl -Lo gettext.tar.xz https://ftp.gnu.org/pub/gnu/gettext/$gettext.tar.xz
 tar xf gettext.tar.xz
-cd gettext-0.21
+cd $gettext
 ./configure --prefix=/usr --libdir=/usr/lib64
 make -j4
 sudo make install
 cd
+rm -rf $gettext
+rm gettext.tar.xz
+
 
 
 # Cross Compile setup for pspp
@@ -29,7 +34,7 @@ sudo zypper -n refresh
 sudo zypper install -y mingw64-cross-gcc \
      mingw64-cross-pkgconf mingw64-glib2-tools mingw64-hicolor-icon-theme \
      mingw64-libgsl-devel mingw64-libgsl0 mingw64-gtk3-devel \
-     mingw64-libtool \
+     mingw64-libtool mingw64-libreadline6 \
      mingw64-win_iconv-devel mingw64-gdb \
      mingw64-readline-devel \
      mingw64-libxml2-devel
@@ -47,7 +52,7 @@ sudo chown -R pspp:users /usr/x86_64-w64-mingw32
 sudo zypper install -y mingw32-cross-gcc \
      mingw32-cross-pkgconf mingw32-glib2-tools mingw32-hicolor-icon-theme \
      mingw32-libgsl-devel mingw32-libgsl0 mingw32-gtk3-devel \
-     mingw32-libtool \
+     mingw32-libtool mingw32-libreadline6 \
      mingw32-win_iconv-devel mingw32-gdb \
      mingw32-readline-devel \
      mingw32-libxml2-devel
@@ -62,12 +67,13 @@ cd adwaita-icon-theme-3.34.3
 mingw64-configure
 mingw64-make -j4
 mingw64-make install
-
-make distclean
+mingw64-make distclean
 mingw32-configure
 mingw32-make -j4
 mingw32-make install
 cd
+rm -rf adwaita*
+sudo zypper -n rm --clean-deps gtk3-devel
 
 # gtksourceview3 is not on opensuse
 curl -Lo gtks.tar.xz https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.10.tar.xz
@@ -76,10 +82,11 @@ cd gtksourceview-3.24.10
 mingw64-configure
 mingw64-make -j4
 mingw64-make install
-make distclean
+mingw64-make distclean
 mingw32-configure
 mingw32-make -j4
 mingw32-make install
 cd
+rm -rf gtks*
 
 
