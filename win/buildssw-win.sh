@@ -16,4 +16,8 @@ cd spread-sheet-widget-$sswversion
 mingw64-configure
 mingw64-make -j4
 mingw64-make install
+mingw64-make distclean
+mingw32-configure
+mingw32-make -j4
+mingw32-make install
 
