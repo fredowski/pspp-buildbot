@@ -8,4 +8,4 @@
 
 rm -rf /home/buildbot/www/downloads/pspp-win-daily
 cp -R /proc/$(lxc-info -n windows-run -p -H)/root/home/pspp/pspp-master-*/Upload/20* \
-/home/buildbot/www/downloads/pspp-win-daily
+/home/buildbot/www/downloads/windows/pspp-win-daily
