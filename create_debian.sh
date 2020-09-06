@@ -41,6 +41,6 @@ cat buildbot_rsa.pub | lxc-attach -n $name -- /bin/bash -c "/bin/cat > /home/psp
 lxc-attach -n $name -- apt install -y build-essential python3 perl texinfo texlive \
         libgsl-dev libgtk-3-dev libgtksourceview-3.0-dev \
         pkg-config gimp gperf git zip curl autoconf libtool \
-        gettext libreadline-dev
+        gettext libreadline-dev appstream
 lxc-stop $name
 
