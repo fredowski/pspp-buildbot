@@ -45,6 +45,8 @@ scp -o StrictHostKeyChecking=no \
     /tmp/$name-gitrepo.tar \
     pspp@`lxc-info -n $buildvm -i -H`:~
 popd
+
+lxc-attach -n $buildvm -- /bin/bash -c "/home/pspp/ci/upgrade.sh"
 lxc-attach -n $buildvm -- su pspp -c "cd; tar -xf $name-gitrepo.tar"
 lxc-attach -n $buildvm -- su pspp -c "cd; mv build pspp"
 
