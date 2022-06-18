@@ -55,6 +55,7 @@ http://docs.buildbot.net/current/tutorial/firstrun.html#creating-a-master
 pip install --upgrade pip
 pip install 'buildbot[bundle]'
 pip install buildbot-worker
+pip install buildbot-badges
 pip install setuptools-trial
 ```
 

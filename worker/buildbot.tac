@@ -36,10 +36,13 @@ allow_shutdown = None
 maxretries = None
 use_tls = 0
 delete_leftover_dirs = 0
+proxy_connection_string = None
+protocol = 'pb'
 
 s = Worker(buildmaster_host, port, workername, passwd, basedir,
            keepalive, umask=umask, maxdelay=maxdelay,
            numcpus=numcpus, allow_shutdown=allow_shutdown,
-           maxRetries=maxretries, useTls=use_tls,
-           delete_leftover_dirs=delete_leftover_dirs)
+           maxRetries=maxretries, protocol=protocol, useTls=use_tls,
+           delete_leftover_dirs=delete_leftover_dirs,
+           proxy_connection_string=proxy_connection_string)
 s.setServiceParent(application)
