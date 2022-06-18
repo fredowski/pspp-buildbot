@@ -43,6 +43,6 @@ lxc-attach -n $name -- apt install -y build-essential python3 perl texinfo texli
         pkg-config gimp gperf git zip curl autoconf libtool \
         gettext libreadline-dev appstream \
         texlive-plain-generic \
-        libmemory-usage-perl libtext-diff-perl
+        libtext-diff-perl
 lxc-stop $name
 
