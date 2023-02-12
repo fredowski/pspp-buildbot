@@ -19,5 +19,5 @@ cd $workdir
 # Configure and build pspp
 mkdir ./build
 cd build
-../pspp/configure --prefix=$workdir/install PKG_CONFIG_PATH=$workdir/install/lib/pkgconfig
+../pspp/configure --without-perl-module --prefix=$workdir/install PKG_CONFIG_PATH=$workdir/install/lib/pkgconfig
 make -j8 VERSION=$psppversion
