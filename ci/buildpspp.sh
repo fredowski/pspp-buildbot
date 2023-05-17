@@ -8,7 +8,7 @@
 
 workdir=`pwd`
 
-curl -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
+curl -L -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
 #curl -L -o pspp.tgz http://ftpmirror.gnu.org/pspp/pspp-1.2.0.tar.gz
 tar -xzf pspp.tgz
 rm pspp.tgz
