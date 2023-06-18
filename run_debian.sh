@@ -6,14 +6,14 @@ architecture=$2
 
 function usage {
   echo "usage: $0 release architecture"
-  echo "release = buster or sid"
+  echo "release = bullseye or sid"
   echo "architecture = amd64 or i386"
   exit 1
 }
 
 # Check input parameters
 case $release in
-  buster|sid) ;;
+  bullseye|sid) ;;
   *) usage ;;
 esac
 
