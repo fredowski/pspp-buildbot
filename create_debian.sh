@@ -6,14 +6,14 @@ architecture=$2
 
 function usage {
   echo "usage: $0 release architecture"
-  echo "release = buster or sid"
+  echo "release = bullseye or sid"
   echo "architecture = amd64 or i386"
   exit 1
 }
 
 # Check input parameters
 case $release in
-  buster|sid) ;;
+  bullseye|sid) ;;
   *) usage ;;
 esac
 
@@ -39,8 +39,8 @@ lxc-unpriv-attach -n $name -- su pspp -c 'mkdir ~/.ssh'
 cat buildbot_rsa.pub | lxc-unpriv-attach -n $name -- /bin/bash -c "/bin/cat > /home/pspp/.ssh/authorized_keys"
 # pspp
 lxc-unpriv-attach -n $name -- apt install -y build-essential python3 perl texinfo texlive \
-        libgsl-dev libgtk-3-dev libgtksourceview-3.0-dev \
-        pkg-config gimp gperf git zip curl autoconf libtool \
+        libgsl-dev libgtk-3-dev libgtksourceview-4-dev \
+        pkg-config gperf git zip curl autoconf libtool \
         gettext libreadline-dev appstream \
         texlive-plain-generic librsvg2-bin \
         libtext-diff-perl
