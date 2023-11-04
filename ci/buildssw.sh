@@ -9,7 +9,7 @@
 workdir=`pwd`
 
 #Download and install spread-sheet-widget
-sswversion=0.8
+sswversion=0.10
 curl -o ssw.tgz http://alpha.gnu.org/gnu/ssw/spread-sheet-widget-$sswversion.tar.gz
 tar -xzf ssw.tgz
 cd spread-sheet-widget-$sswversion
