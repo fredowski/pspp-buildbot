@@ -25,6 +25,7 @@ esac
 name="$distribution-$release-$architecture"
 echo "Creating: $name"
 
+export LANG=
 lxc-create -n $name -t download -f lxc-config -- --keyserver keyserver.ubuntu.com -d $distribution -r $release -a $architecture
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network

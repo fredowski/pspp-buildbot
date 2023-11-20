@@ -28,6 +28,8 @@ buildvm="$name-build"
 
 # Set the default file creation mode to readable for all
 umask 22
+export LANG=
+
 
 lxc-info -n $name
 lxc-copy --name $name --newname $buildvm
