@@ -7,4 +7,6 @@ newname=$1
 lxc-info $newname
 pwd
 # Copy the testdir file from the container
-cp /proc/$(lxc-info -n $newname -p -H)/root/home/pspp/build/tests/testsuite.log .
+scp -o StrictHostKeyChecking=no \
+    -i /home/buildbot/pspp-buildbot/buildbot_rsa \
+    pspp@`lxc-info -n $newname -i -H`:/home/pspp/build/tests/testsuite.log .
