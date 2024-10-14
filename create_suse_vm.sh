@@ -13,6 +13,7 @@ lxc-unpriv-attach -n $name -- sh -c "echo 'PubkeyAuthentication yes' >> /etc/ssh
 lxc-unpriv-attach -n $name -- su pspp -c 'chmod a+rx ~'
 lxc-unpriv-attach -n $name -- su pspp -c 'mkdir ~/.ssh'
 cat buildbot_rsa.pub | lxc-unpriv-attach -n $name -- /bin/bash -c "/bin/cat > /home/pspp/.ssh/authorized_keys"
+lxc-unpriv-attach -n $name -- systemctl enable sshd
 # pspp
 lxc-unpriv-attach -n $name -- zypper install -y gcc python3 perl texinfo texlive \
         gsl-devel gtk3-devel gtksourceview4-devel \
