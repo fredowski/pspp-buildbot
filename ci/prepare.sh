@@ -7,7 +7,7 @@
 # or any later option
 
 #Download gnulib
-gnulibver=11ec314e8d35829efac53b7a55a0a63fcabfadf1
+gnulibver=c0184d73eb46dacdd410d1dde8a6ef70470a8ccf
 curl -o gnulib.zip https://codeload.github.com/coreutils/gnulib/zip/$gnulibver
 unzip -q gnulib.zip
 rm gnulib.zip
