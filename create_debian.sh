@@ -2,31 +2,27 @@
 
 distribution=debian
 release=$1
-architecture=$2
+
+releasename=$release
 
 function usage {
-  echo "usage: $0 release architecture"
+  echo "usage: $0 release"
   echo "release = bullseye or sid"
-  echo "architecture = amd64 or i386"
   exit 1
 }
 
 # Check input parameters
 case $release in
-  bullseye|sid) ;;
+  bullseye) ;;
+  sid)  releasename=forky ;;
   *) usage ;;
 esac
 
-case $architecture in
-  amd64|i386) ;;
-  *) usage ;;
-esac
-
-name="$distribution-$release-$architecture"
+name="$distribution-$release-amd64"
 echo "Creating: $name"
 
 export LANG=
-lxc-create -n $name -t download -f lxc-config -- --keyserver keyserver.ubuntu.com -d $distribution -r trixie -a $architecture
+lxc-create -n $name -t download -f lxc-config -- --keyserver keyserver.ubuntu.com -d $distribution -r $releasename -a amd64
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
