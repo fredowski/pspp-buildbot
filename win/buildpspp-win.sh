@@ -15,7 +15,7 @@ curl -L -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
 tar -xzf pspp.tgz
 psppversion=`ls -d pspp-* | sed -n 's/pspp-\(.*\)/\1/p'`
 cd pspp-$psppversion/Windows
-./build-dependencies --arch=x86_64-w64-mingw32 --sandbox=$sandboxdir
+./build-dependencies --arch=x86_64-w64-mingw32 --sandbox=$sandboxdir --no-clean
 cd
 mkdir build
 cd build
@@ -33,9 +33,6 @@ make Windows/installers
 cd
 mkdir -p results/$psppversion
 cp build/Windows/*.exe results/$psppversion
-
-
-
-
-
+chmod -R a+rx results
+chmod a+rx .
 
