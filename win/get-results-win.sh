@@ -8,12 +8,11 @@
 
 
 resdir=/proc/$(lxc-info -n windows-run -p -H)/root/home/pspp/results
-psppversion=`ls $resdir`
-today=`date "+%Y-%m-%d"`
-downloaddir=/home/buildbot/www/downloads/windows/pspp-win-daily/$today-$psppversion
-mkdir -p $downloaddir
-cp -R $resdir/$psppversion/* $downloaddir
+# The results directory should contain a directory in the format YY-MM-DD-version-commit
+dateversion=`ls $resdir`
+downloaddir=/home/buildbot/www/downloads/windows/pspp-win-daily
+cp -R $resdir/* $downloaddir
 
-echo "Download: https://caeis.etech.fh-augsburg.de/downloads/windows/pspp-win-daily/$today-$psppversion"
+echo "Download: https://caeis.etech.fh-augsburg.de/downloads/windows/pspp-win-daily/$dateversion"
 
 
