@@ -13,7 +13,7 @@ sandboxdir=/home/pspp/sandbox
 
 curl -L -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
 #Extract the creation date in the format YYYY-MM-DD
-srcdate=`stat -c "%y" pspp.tgz | cut -d ' ' -f1`
+TZ=UTC srcdate=`stat -c "%y" pspp.tgz | cut -d ' ' -f1`
 tar -xzf pspp.tgz
 psppversion=`ls -d pspp-* | sed -n 's/pspp-\(.*\)/\1/p'`
 cd pspp-$psppversion/Windows
