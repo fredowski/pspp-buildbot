@@ -3,7 +3,7 @@
 # with the new build scheme from John
 # Create the build machine
 
-# Copyright (C) 2021 Free Software Foundation, Inc.
+# Copyright (C) 2021, 2025 Free Software Foundation, Inc.
 # Released under GNU General Public License, either version 3
 # or any later option
 
@@ -34,7 +34,7 @@ lxc-unpriv-attach -n $name -- apt install -y build-essential python3 perl texinf
         mingw-w64 meson ninja-build \
         imagemagick wget nsis texlive-plain-generic
 # download build dependencies
-lxc-unpriv-attach -n $name -- su pspp -c 'cd; wget https://cgit.git.savannah.gnu.org/cgit/pspp.git/plain/Windows/build-dependencies?id=fbb8730ed1ae86a545632cb396018edeb67a5617 -O build-dependencies'
+lxc-unpriv-attach -n $name -- su pspp -c 'cd; wget https://cgit.git.savannah.gnu.org/cgit/pspp.git/plain/Windows/build-dependencies -O build-dependencies'
 lxc-unpriv-attach -n $name -- su pspp -c 'chmod a+x /home/pspp/build-dependencies'
 lxc-unpriv-attach -n $name -- su pspp -c 'cd; ./build-dependencies --arch=x86_64-w64-mingw32 --sandbox=/home/pspp/sandbox --no-clean'
 # delete all sandbox directories except the tarballs directory
