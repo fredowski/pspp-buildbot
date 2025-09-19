@@ -11,8 +11,8 @@ workdir=`pwd`
 
 sandboxdir=/home/pspp/sandbox
 
-curl -L -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
-#Extract the creation date in the format YYYY-MM-DD
+curl -L -R -o pspp.tgz https://benpfaff.org/~blp/pspp-master/latest-source.tar.gz
+#Extract the file modification date in the format YYYY-MM-DD
 srcdate=`date -u -r pspp.tgz +"%Y-%m-%d"`
 tar -xzf pspp.tgz
 psppversion=`ls -d pspp-* | sed -n 's/pspp-\(.*\)/\1/p'`
