@@ -22,7 +22,7 @@ name="$distribution-$release-amd64"
 echo "Creating: $name"
 
 export LANG=
-lxc-create -n $name -t download -f lxc-config -- --keyserver keyserver.ubuntu.com -d $distribution -r $releasename -a amd64
+lxc-create -n $name -t download -f lxc.config -- -d $distribution -r $releasename -a amd64
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
@@ -34,9 +34,13 @@ lxc-unpriv-attach -n $name -- sh -c "echo 'pspp ALL=(ALL) NOPASSWD:ALL' >> /etc/
 lxc-unpriv-attach -n $name -- sh -c "echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config"
 lxc-unpriv-attach -n $name -- su pspp -c 'mkdir ~/.ssh'
 cat buildbot_rsa.pub | lxc-unpriv-attach -n $name -- /bin/bash -c "/bin/cat > /home/pspp/.ssh/authorized_keys"
+lxc-unpriv-attach -n $name -- chown pspp:pspp /home/pspp/.ssh/authorized_keys
+lxc-unpriv-attach -n $name -- chmod 700 /home/pspp/.ssh
+lxc-unpriv-attach -n $name -- chmod 600 /home/pspp/.ssh/authorized_keys 
 # pspp
 lxc-unpriv-attach -n $name -- apt install -y build-essential python3 perl texinfo texlive \
         libgsl-dev libgtk-3-dev libgtksourceview-4-dev \
+        autopoint libtool-bin \
         pkg-config gperf git zip curl autoconf libtool \
         gettext libreadline-dev appstream \
         texlive-plain-generic librsvg2-bin \

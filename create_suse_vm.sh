@@ -2,7 +2,7 @@
 
 name="opensuse"
 
-lxc-create -n $name -t download -f lxc-config -- --keyserver keyserver.ubuntu.com -d opensuse -r tumbleweed -a amd64
+lxc-create -n $name -t download -f lxc-config -- -d opensuse -r tumbleweed -a amd64
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15

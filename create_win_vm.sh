@@ -14,7 +14,7 @@ architecture=amd64
 name="windows"
 echo "Creating: $name"
 
-lxc-create -n $name -t download -f lxc-config -- -d $distribution -r $release -a $architecture
+lxc-create -n $name -t download -f lxc.config -- -d $distribution -r $release -a $architecture
 systemd-run --user -p "Delegate=yes" lxc-start -F $name
 # wait for network
 sleep 15
