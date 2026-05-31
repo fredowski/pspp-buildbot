@@ -35,7 +35,7 @@ lxc-info -n $name
 lxc-copy --name $name --newname $buildvm
 systemd-run --user -p "Delegate=yes" lxc-start -F $buildvm
 # 5. Wait for container to be RUNNING (better than blind sleep)
-echo "Waiting for $newname to start..."
+echo "Waiting for $buildvm to start..."
 for i in $(seq 1 30); do
     state=$(lxc-info -n "$buildvm" | awk '/State:/{print $2}')
     [ "$state" = "RUNNING" ] && break
@@ -54,7 +54,7 @@ done
 
 # Copy the files in directory ./ci into the container
 pushd ~/pspp-buildbot
-tar -c ./ci | lxc-attach -n $buildvm -- tar -C /home/pspp -vx
+tar -c ./ci | lxc-attach -n $buildvm -- sh -c 'tar -C /home/pspp -x'
 popd
 
 pushd ~/pspp-buildbot
