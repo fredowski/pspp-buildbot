@@ -10,7 +10,7 @@ systemd-run --user -p "Delegate=yes" lxc-start -F vm2
 sleep 15
 # Copy the files in directory ./ci into the container
 pushd ~/pspp-buildbot
-tar -c ./ci | lxc-attach -n vm2 -- tar -C /home/pspp -vx
+tar -c ./ci | lxc-attach -n vm2 -- sh -c 'tar -C /home/pspp -x'
 popd
 #lxc-attach -n vm2 -- su pspp -c "cd; ./ci/prepare.sh"
 lxc-attach -n vm2 -- su pspp -c "cd; ./ci/buildssw.sh"
