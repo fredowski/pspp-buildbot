@@ -25,7 +25,7 @@ for i in $(seq 1 30); do
 done
 # Copy the files in directory ./win into the container
 pushd ~/pspp-buildbot
-tar -c ./win | lxc-attach -n $newname -- tar -C /home/pspp -vx
+tar -c ./win | lxc-attach -n $newname -- sh -c 'trap "" HUP;tar -C /home/pspp -x'
 popd
 lxc-attach -n $newname -- su pspp -c "cd; sudo chown -R pspp:users ./win"
 lxc-attach -n $newname -- su pspp -c "cd; ./win/buildpspp-win.sh"
