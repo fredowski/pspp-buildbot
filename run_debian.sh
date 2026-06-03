@@ -54,7 +54,7 @@ done
 
 # Copy the files in directory ./ci into the container
 pushd ~/pspp-buildbot
-tar -c ./ci | lxc-attach -n $buildvm -- sh -c 'tar -C /home/pspp -x'
+tar -c ./ci | lxc-attach -n $buildvm -- sh -c 'trap "" HUP;tar -C /home/pspp -x'
 popd
 
 pushd ~/pspp-buildbot
